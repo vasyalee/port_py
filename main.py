@@ -10,19 +10,20 @@ def acceptNewShip(_schedule):
     for i in range(len(_schedule)):
         if _schedule[i]["day"] == day and _schedule[i]["hour"] == hour and _schedule[i]["minutes"] == minutes:
             arrived.append(schedule[i])
-def startUnloading(_arrived):
-    for j in range(len(_arrived)):
-        if len(CONT_CRANE) == 0 and _arrived[j]["cargoType"] == "CONT":
-            CONT_CRANE.append(_arrived[j])
-            del _arrived[j]
+def startUnloading(_arrived, _CONT_CRANE, _LIQ_CRANE, _BULK_CRANE):
 
-        elif len(LIQ_CRANE) == 0 and _arrived[j]["cargoType"] == "LIQ":
-            LIQ_CRANE.append(_arrived[j])
-            del _arrived[j]
+    for _ship in _arrived:
 
-        elif len(BULK_CRANE) == 0 and _arrived[j]["cargoType"] == "BULK":
-            BULK_CRANE.append(_arrived[j])
-            del _arrived[j]
+        if len(_CONT_CRANE) == 0 and _ship["cargoType"] == "CONT":
+            CONT_CRANE.append(_ship)
+            _arrived.remove(_ship)
+        elif len(_LIQ_CRANE) == 0 and _ship["cargoType"] == "LIQ":
+            CONT_CRANE.append(_ship)
+            _arrived.remove(_ship)
+
+        elif len(_BULK_CRANE) == 0 and _ship["cargoType"] == "BULK":
+            CONT_CRANE.append(_ship)
+            _arrived.remove(_ship)
 
 def unload(_CONT_CRANE, _LIQ_CRANE, _BULK_CRANE, _unloaded):
     for _ship in _CONT_CRANE:
@@ -69,7 +70,7 @@ CONT_CRANE = []
 LIQ_CRANE = []
 BULK_CRANE = []
 
-generateSchedule(3)
+generateSchedule(5)
 
 
 for day in range(31):
@@ -77,7 +78,7 @@ for day in range(31):
         unload(CONT_CRANE, LIQ_CRANE, BULK_CRANE, unloaded)
         for minutes in range(0, 60):
             acceptNewShip(schedule)
-        startUnloading(arrived)
+        startUnloading(arrived, CONT_CRANE, LIQ_CRANE, BULK_CRANE)
 
 
 
@@ -108,5 +109,9 @@ print("Ships already unloaded: ")
 print()
 for ship in unloaded:
     print(f'{ship["day"]} DAY {ship["hour"]}:{ship["minutes"]} "{ship["ship"]}" {ship["cargoType"]}')
+
+
+
+
 
 
