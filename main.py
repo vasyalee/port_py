@@ -1,4 +1,29 @@
 import random
+def generateSchedule(_shipsNumber):
+    for i in range(_shipsNumber):
+        schedule.append({"day": random.randint(1, 31), "hour": random.randint(0, 24), "minutes": random.randint(0, 60),
+                         "ship": random.choice(ship_names), "cargoType": random.choice(cargo_types),
+                         "weight": random.randint(5000, 30000)})
+
+def acceptNewShip(_schedule):
+    for i in range(len(_schedule)):
+        if _schedule[i]["day"] == day and _schedule[i]["hour"] == hour and _schedule[i]["minutes"] == minutes:
+            arrived.append(schedule[i])
+def startUnloading(_arrived):
+    for j in range(len(_arrived)):
+        if len(CONT_CRANE) == 0 and _arrived[j]["cargoType"] == "CONT":
+            CONT_CRANE.append(_arrived[j])
+            del _arrived[j]
+
+        elif len(LIQ_CRANE) == 0 and _arrived[j]["cargoType"] == "LIQ":
+            LIQ_CRANE.append(_arrived[j])
+            del _arrived[j]
+
+        elif len(BULK_CRANE) == 0 and _arrived[j]["cargoType"] == "BULK":
+            BULK_CRANE.append(_arrived[j])
+            del _arrived[j]
+
+
 ship_names = ["KSL-SANTOS", "VITAOCEAN", "SEA AMETHYST", "MSC BENEDETTA"
               "BLUE SEA", "ZENOVIA LADY", "MARLIN AMBER", "ALPHA UNITY",
               "SHANDONG JUNIPER", "GISELA OLDENDORFF", "MSC SVEVA",
@@ -10,33 +35,24 @@ cargo_types = ["CONT", "LIQ", "BULK"]
 
 schedule = []
 arrived = []
-for i in range(10):
-    schedule.append({"day": random.randint(1, 31), "hour": random.randint(0, 24), "minutes": random.randint(0, 60),
-                  "ship": random.choice(ship_names), "cargoType": random.choice(cargo_types), "weight": random.randint(5000, 30000)})
+
+
+
+#cranes available
 CONT_CRANE = []
 LIQ_CRANE = []
 BULK_CRANE = []
+
+generateSchedule(15)
 
 
 for day in range(31):
     for hour in range(0, 24):
         for minutes in range(0, 60):
-            for i in range(len(schedule)):
-                if schedule[i]["day"] == day and schedule[i]["hour"] == hour and schedule[i]["minutes"] == minutes:
-                    arrived.append(schedule[i])
+            acceptNewShip(schedule)
+        startUnloading(arrived)
 
-            for j in range(len(arrived)):
-                if len(CONT_CRANE) == 0 and arrived[j]["cargoType"] == "CONT":
-                    CONT_CRANE.append(arrived[j])
-                    del arrived[j]
 
-                elif len(LIQ_CRANE) == 0 and arrived[j]["cargoType"] == "LIQ":
-                    LIQ_CRANE.append(arrived[j])
-                    del arrived[j]
-
-                elif len(BULK_CRANE) == 0 and arrived[j]["cargoType"] == "BULK":
-                    BULK_CRANE.append(arrived[j])
-                    del arrived[j]
 
 print("Currently unloading: ")
 print()
